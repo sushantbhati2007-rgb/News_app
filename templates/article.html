@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ a.title }} | Daily News</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <header>
+        <a class="logo" href="{{ url_for('home') }}">📰 Daily News</a>
+        <div class="header-actions">
+            {% if is_admin %}
+            <a class="header-link" href="{{ url_for('admin_edit', article_id=a.id) }}">✏️ Edit</a>
+            {% endif %}
+            <button id="darkModeBtn" title="Dark mode" aria-label="Toggle dark mode">🌙</button>
+        </div>
+    </header>
+
+    <article class="article-page">
+        <a class="back-link" href="{{ url_for('home') }}">← Back to news</a>
+
+        <span class="badge">{{ a.category|capitalize }}</span>
+        <h1>{{ a.title }}</h1>
+        <p class="meta">⭐ Our News · <time class="local-time" datetime="{{ a.created_at }}">{{ a.created_at }}</time></p>
+
+        {% if a.image %}
+        <img class="article-image" src="{{ a.image }}" alt="" referrerpolicy="no-referrer">
+        {% endif %}
+
+        <p class="lead">{{ a.description }}</p>
+
+        {% if a.content %}
+        <div class="article-body">{{ a.content }}</div>
+        {% endif %}
+    </article>
+
+    <script>
+        // Dark mode (remembered)
+        if (localStorage.getItem("dark") === "1") document.body.classList.add("dark");
+        document.getElementById("darkModeBtn").addEventListener("click", function () {
+            document.body.classList.toggle("dark");
+            localStorage.setItem("dark", document.body.classList.contains("dark") ? "1" : "0");
+        });
+        // Show time in the reader's own timezone
+        document.querySelectorAll(".local-time").forEach(function (el) {
+            var d = new Date(el.getAttribute("datetime"));
+            if (!isNaN(d)) el.textContent = d.toLocaleString();
+        });
+    </script>
+</body>
+
+</html>

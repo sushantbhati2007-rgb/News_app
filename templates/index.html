@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily News</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <a class="logo" href="{{ url_for('home') }}">📰 Daily News</a>
+
+        <div class="header-actions">
+            {% if is_admin %}
+            <a class="header-link" href="{{ url_for('admin') }}">➕ Upload News</a>
+            {% else %}
+            <a class="header-link" href="{{ url_for('login') }}">Admin</a>
+            {% endif %}
+            <button id="refreshBtn" title="Refresh" aria-label="Refresh">🔄</button>
+            <button id="darkModeBtn" title="Dark mode" aria-label="Toggle dark mode">🌙</button>
+        </div>
+    </header>
+
+    <!-- NAVIGATION -->
+    <nav id="categoryNav">
+        <button data-category="general" class="active">Home</button>
+        <button data-category="ours">⭐ Our News</button>
+        <button data-category="technology">💻 Technology</button>
+        <button data-category="business">💰 Business</button>
+        <button data-category="sports">⚽ Sports</button>
+        <button data-category="science">🔬 Science</button>
+        <button data-category="entertainment">🎬 Entertainment</button>
+        <button data-category="health">❤️ Health</button>
+    </nav>
+
+    <!-- SEARCH -->
+    <section class="search-section">
+        <input type="text" id="searchInput" placeholder="Search news...">
+        <button id="searchBtn">🔍 Search</button>
+    </section>
+
+    <!-- TITLE -->
+    <section class="heading">
+        <h1 id="pageTitle">📰 Latest News</h1>
+        <small id="lastUpdated"></small>
+    </section>
+
+    <div id="loading">⏳ Loading news...</div>
+    <div id="error"></div>
+
+    <main id="newsContainer"></main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>

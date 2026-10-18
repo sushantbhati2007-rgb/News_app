@@ -1,0 +1,549 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    color: #222;
+}
+
+a {
+    color: inherit;
+}
+
+/* HEADER */
+
+header {
+    background: #111827;
+    color: white;
+    padding: 18px 6%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo {
+    font-size: 26px;
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.header-link {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 7px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 20px;
+}
+
+.header-link:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.as-button {
+    background: none;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+#darkModeBtn,
+#refreshBtn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+#refreshBtn.spin {
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* NAVIGATION */
+
+nav {
+    background: white;
+    padding: 12px 6%;
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+nav button {
+    border: none;
+    background: #eef2ff;
+    padding: 10px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+nav button:hover {
+    background: #dbeafe;
+}
+
+nav button.active {
+    background: #2563eb;
+    color: white;
+}
+
+/* SEARCH */
+
+.search-section {
+    padding: 30px 6%;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.search-section input {
+    width: 60%;
+    max-width: 600px;
+    padding: 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.search-section button {
+    padding: 14px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* HEADING */
+
+.heading {
+    padding: 0 6% 20px;
+}
+
+.heading h1 {
+    font-size: 28px;
+}
+
+.heading small {
+    color: #666;
+}
+
+/* LOADING / ERROR / NOTICE */
+
+#loading {
+    text-align: center;
+    padding: 30px;
+    font-size: 18px;
+}
+
+#error {
+    text-align: center;
+    color: #dc2626;
+    padding: 20px;
+    display: none;
+}
+
+.notice {
+    grid-column: 1 / -1;
+    background: #fef3c7;
+    color: #92400e;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+/* NEWS GRID */
+
+#newsContainer {
+    padding: 10px 6% 50px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+/* NEWS CARD */
+
+.news-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: 0.3s;
+    position: relative;
+}
+
+.news-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.news-card img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+}
+
+.news-card.own {
+    border-top: 4px solid #f59e0b;
+}
+
+.own-badge,
+.badge {
+    display: inline-block;
+    background: #fef3c7;
+    color: #92400e;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+
+.news-content {
+    padding: 18px;
+}
+
+.news-content h2 {
+    font-size: 19px;
+    margin-bottom: 10px;
+}
+
+.news-content p {
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 12px;
+}
+
+.source {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.read-more {
+    display: inline-block;
+    padding: 9px 14px;
+    background: #2563eb;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+}
+
+/* ARTICLE PAGE */
+
+.article-page {
+    max-width: 760px;
+    margin: 30px auto;
+    padding: 0 20px 60px;
+}
+
+.article-page h1 {
+    font-size: 32px;
+    line-height: 1.25;
+    margin-bottom: 10px;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 18px;
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.meta,
+.muted {
+    color: #666;
+    font-size: 14px;
+}
+
+.article-image {
+    width: 100%;
+    max-height: 420px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin: 20px 0;
+}
+
+.lead {
+    font-size: 19px;
+    line-height: 1.6;
+    font-weight: bold;
+    margin: 18px 0;
+}
+
+.article-body {
+    font-size: 17px;
+    line-height: 1.8;
+    white-space: pre-wrap;
+}
+
+/* FORMS (login + admin) */
+
+.admin-wrap {
+    max-width: 820px;
+    margin: 30px auto;
+    padding: 0 20px 60px;
+}
+
+.form-card {
+    background: white;
+    border-radius: 12px;
+    padding: 26px;
+    margin-bottom: 26px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.form-card.narrow {
+    max-width: 420px;
+    margin: 40px auto;
+}
+
+.form-card h1,
+.form-card h2 {
+    margin-bottom: 18px;
+}
+
+.form-card label {
+    display: block;
+    font-weight: bold;
+    margin: 16px 0 6px;
+    font-size: 14px;
+}
+
+.form-card label small {
+    font-weight: normal;
+    color: #777;
+}
+
+.form-card input[type="text"],
+.form-card input[type="url"],
+.form-card input[type="password"],
+.form-card textarea,
+.form-card select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: inherit;
+}
+
+.form-card textarea {
+    resize: vertical;
+}
+
+.check {
+    font-weight: normal !important;
+    display: flex !important;
+    gap: 8px;
+    align-items: center;
+}
+
+.current-image img {
+    max-width: 220px;
+    border-radius: 8px;
+    display: block;
+}
+
+.btn-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 11px 18px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #f3f4f6;
+    color: #222;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.btn.primary {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: white;
+}
+
+.btn.danger {
+    background: #fee2e2;
+    border-color: #fca5a5;
+    color: #b91c1c;
+}
+
+.btn.small {
+    padding: 6px 12px;
+    font-size: 13px;
+}
+
+.inline {
+    display: inline;
+}
+
+.flash {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.flash.ok {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.flash.error {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.article-list {
+    list-style: none;
+}
+
+.article-list li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.article-list img,
+.thumb-empty {
+    width: 64px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 6px;
+    background: #eef2ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.grow {
+    flex: 1;
+    min-width: 0;
+}
+
+.grow a {
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* DARK MODE */
+
+body.dark {
+    background: #111827;
+    color: white;
+}
+
+body.dark nav,
+body.dark .news-card,
+body.dark .form-card {
+    background: #1f2937;
+}
+
+body.dark nav button {
+    background: #374151;
+    color: white;
+}
+
+body.dark nav button.active {
+    background: #2563eb;
+}
+
+body.dark .news-content p,
+body.dark .source,
+body.dark .meta,
+body.dark .muted,
+body.dark .heading small {
+    color: #d1d5db;
+}
+
+body.dark .form-card input,
+body.dark .form-card textarea,
+body.dark .form-card select,
+body.dark .search-section input {
+    background: #111827;
+    color: white;
+    border-color: #4b5563;
+}
+
+body.dark .btn {
+    background: #374151;
+    border-color: #4b5563;
+    color: white;
+}
+
+body.dark .btn.primary {
+    background: #2563eb;
+    border-color: #2563eb;
+}
+
+body.dark .article-list li {
+    border-color: #374151;
+}
+
+body.dark .own-badge,
+body.dark .badge {
+    background: #78350f;
+    color: #fde68a;
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+    .logo {
+        font-size: 21px;
+    }
+
+    .search-section {
+        padding: 20px;
+    }
+
+    .search-section input {
+        width: 100%;
+    }
+
+    .heading {
+        padding-left: 20px;
+    }
+
+    #newsContainer {
+        padding: 10px 20px 40px;
+    }
+
+    .article-page h1 {
+        font-size: 25px;
+    }
+
+    .header-link {
+        font-size: 12px;
+        padding: 6px 9px;
+    }
+}

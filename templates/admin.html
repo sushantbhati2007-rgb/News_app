@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ 'Edit news' if edit else 'Upload news' }} | Daily News</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <header>
+        <a class="logo" href="{{ url_for('home') }}">📰 Daily News</a>
+        <div class="header-actions">
+            <a class="header-link" href="{{ url_for('home') }}">View site</a>
+            <form method="post" action="{{ url_for('logout') }}" class="inline">
+                <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+                <button type="submit" class="header-link as-button">Logout</button>
+            </form>
+        </div>
+    </header>
+
+    <main class="admin-wrap">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for cat, msg in messages %}
+        <div class="flash {{ cat }}">{{ msg }}</div>
+        {% endfor %}
+        {% endwith %}
+
+        {% if not edit %}
+        {% set st = import_status() %}
+        <section class="form-card">
+            <h2>🔄 Automatic news import</h2>
+            {% if AUTO_IMPORT %}
+            <p class="muted">Latest news is fetched from the RSS feeds in <code>feeds.py</code> every
+                {{ FEED_REFRESH_MINUTES }} minutes.</p>
+            {% else %}
+            <p class="muted">Automatic import is switched off (<code>AUTO_IMPORT=0</code> in .env).
+                You can still fetch manually.</p>
+            {% endif %}
+            <p>
+                {% if st.running %}⏳ Fetching right now…
+                {% elif st.last_run %}Last run: <time class="local-time" datetime="{{ st.last_run }}">{{ st.last_run }}</time>
+                · <strong>{{ st.added }}</strong> new article(s)
+                {% else %}No import has finished yet since the app started.{% endif %}
+            </p>
+            {% if st.errors %}
+            <div class="flash error">
+                <strong>Some feeds failed:</strong>
+                <ul>{% for e in st.errors %}<li>{{ e }}</li>{% endfor %}</ul>
+            </div>
+            {% endif %}
+            <form method="post" action="{{ url_for('admin_fetch_now') }}">
+                <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+                <button type="submit" class="btn">Fetch latest news now</button>
+            </form>
+        </section>
+        {% endif %}
+
+        <section class="form-card">
+            <h1>{{ '✏️ Edit news' if edit else '➕ Upload news' }}</h1>
+
+            <form method="post" enctype="multipart/form-data"
+                action="{{ url_for('admin_edit', article_id=edit.id) if edit else url_for('admin_add') }}">
+                <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+
+                <label for="title">Headline *</label>
+                <input type="text" id="title" name="title" maxlength="200" required value="{{ form.get('title', '') }}">
+
+                <label for="description">Short description * <small>(shown on the card, max 500)</small></label>
+                <textarea id="description" name="description" rows="3" maxlength="500"
+                    required>{{ form.get('description', '') }}</textarea>
+
+                <label for="content">Full story <small>(optional, opens on the article page)</small></label>
+                <textarea id="content" name="content" rows="8"
+                    maxlength="20000">{{ form.get('content', '') }}</textarea>
+
+                <label for="category">Category *</label>
+                <select id="category" name="category">
+                    {% for c in CATEGORIES %}
+                    <option value="{{ c }}" {{ 'selected' if form.get('category', 'general' ) == c }}>{{ c|capitalize
+                        }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="image_file">Image <small>(PNG, JPG, WEBP or GIF, up to 5 MB)</small></label>
+                {% if edit and edit.image %}
+                <div class="current-image">
+                    <img src="{{ edit.image }}" alt="Current image">
+                    <label class="check"><input type="checkbox" name="remove_image" value="1"> Remove current
+                        image</label>
+                </div>
+                {% endif %}
+                <input type="file" id="image_file" name="image_file" accept="image/png,image/jpeg,image/webp,image/gif">
+
+                <label for="image_url">…or paste an image link</label>
+                <input type="url" id="image_url" name="image_url" placeholder="https://example.com/photo.jpg">
+
+                <div class="btn-row">
+                    <button type="submit" class="btn primary">{{ 'Save changes' if edit else 'Publish' }}</button>
+                    {% if edit %}<a class="btn" href="{{ url_for('admin') }}">Cancel</a>{% endif %}
+                </div>
+            </form>
+        </section>
+
+        {% if not edit %}
+        <section class="form-card">
+            <h2>Your published news ({{ articles|length }})</h2>
+
+            {% if not articles %}
+            <p class="muted">Nothing yet. Publish your first story above.</p>
+            {% else %}
+            <ul class="article-list">
+                {% for a in articles %}
+                <li>
+                    {% if a.image %}<img src="{{ a.image }}" alt="">{% else %}<span class="thumb-empty">📰</span>{% endif %}
+                    <div class="grow">
+                        <a href="{{ url_for('article', article_id=a.id) }}" target="_blank">{{ a.title }}</a>
+                        <div class="muted">{{ a.category|capitalize }} · {{ a.created_at }}</div>
+                    </div>
+                    <a class="btn small" href="{{ url_for('admin_edit', article_id=a.id) }}">Edit</a>
+                    <form method="post" action="{{ url_for('admin_delete', article_id=a.id) }}" class="inline"
+                        onsubmit="return confirm('Delete this news permanently?');">
+                        <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn small danger">Delete</button>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </section>
+        {% endif %}
+    </main>
+
+    <script>
+        document.querySelectorAll(".local-time").forEach(function (el) {
+            var d = new Date(el.getAttribute("datetime"));
+            if (!isNaN(d)) el.textContent = d.toLocaleString();
+        });
+    </script>
+</body>
+
+</html>
